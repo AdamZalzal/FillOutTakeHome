@@ -16,18 +16,23 @@ export const fetchResponses = async (
     }
   );
   const response = await request.json();
-  const filteredResponse = filterResponse(response, filters);
-  if (limit) {
-    const paginatedResults = paginateSubmissions(
-      filteredResponse.responses,
-      limit,
-      offset
-    );
-    return {
-      responses: paginatedResults[0],
-      pageCount: Math.ceil(filteredResponse.totalResponses / limit),
-      totalResponses: filteredResponse.totalResponses,
-    };
+  if (response?.responses) {
+    const filteredResponse = filterResponse(response, filters);
+    if (limit) {
+      const paginatedResults = paginateSubmissions(
+        filteredResponse.responses,
+        limit,
+        offset
+      );
+      return {
+        responses: paginatedResults[0],
+        pageCount: Math.ceil(filteredResponse.totalResponses / limit),
+        totalResponses: filteredResponse.totalResponses,
+      };
+    }
+    return filteredResponse;
   }
-  return filteredResponse;
+
+  return response
+  
 };

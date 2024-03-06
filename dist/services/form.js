@@ -18,15 +18,18 @@ const fetchResponses = (formId, filters, queryString, limit, offset) => __awaite
         },
     });
     const response = yield request.json();
-    const filteredResponse = (0, helpers_1.filterResponse)(response, filters);
-    if (limit) {
-        const paginatedResults = (0, helpers_1.paginateSubmissions)(filteredResponse.responses, limit, offset);
-        return {
-            responses: paginatedResults[0],
-            pageCount: Math.ceil(filteredResponse.totalResponses / limit),
-            totalResponses: filteredResponse.totalResponses,
-        };
+    if (response === null || response === void 0 ? void 0 : response.responses) {
+        const filteredResponse = (0, helpers_1.filterResponse)(response, filters);
+        if (limit) {
+            const paginatedResults = (0, helpers_1.paginateSubmissions)(filteredResponse.responses, limit, offset);
+            return {
+                responses: paginatedResults[0],
+                pageCount: Math.ceil(filteredResponse.totalResponses / limit),
+                totalResponses: filteredResponse.totalResponses,
+            };
+        }
+        return filteredResponse;
     }
-    return filteredResponse;
+    return response;
 });
 exports.fetchResponses = fetchResponses;
